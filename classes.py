@@ -30,16 +30,10 @@ class Pion:
         
 
 class Jeu:
-    def __init__(self, boardSize):
+    def __init__(self, boardSize, pion):
         self.__boardSize = boardSize
-        self.pion = None
+        self.pion = pion
         self.__Board = self.plateau(boardSize)
-        
-    def setPion(self,  x, y, player):
-        if self.pion is None or (x, y) != (self.pion.getX(), self.pion.getY()):
-            self.pion = Pion(x, y, player)
-        else:
-            self.pion.setPlayer(player)
 
     def plateau(self, boardSize):
         board = []
@@ -80,7 +74,10 @@ class Jeu:
 class GameInterface:
     def __init__(self, boardSize):
         self.boardSize = boardSize
-        self.jeu = Jeu(boardSize)
+        self.pion = Pion(0, 0, 1)
+        self.jeu = Jeu(boardSize, pion)
+        self.player = 1
+
         self.window = Tk()
         self.window.title("Jeu de Puissance 5")
 
@@ -98,12 +95,14 @@ class GameInterface:
         
 
     def place_pion(self, x, y):
-        self.jeu.setPion(x, y, 1)
+        self.pion.setX(x)
+        self.pion.setY(y)
         if self.jeu.updateBoard(x, y) == True:
             self.buttons[x][y].config(bg='green')
         else:
             self.buttons[x][y].config(bg='red')
             
             
+pion = Pion(0,0,1)    
+game = Jeu(10, pion)
 game = GameInterface(10)
-
