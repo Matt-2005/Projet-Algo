@@ -69,11 +69,26 @@ class GameInterface:
         self.boardSize = boardSize
         self.pion = Pion(0, 0, 1)
         self.jeu = Jeu(boardSize, self.pion)
+        self.player = 1
 
         self.window = Tk()
         self.window.title("Jeu de Puissance 5")
+        self.window.config(padx=20, pady=20, highlightthickness=0, bd=0, bg="black")
 
-        self.buttons = [[Button(self.window, width=4, height=2, command=lambda i=i, j=j: self.place_pion(i, j)) for j in range(boardSize)] for i in range(boardSize)]
+        self.__frame1 = Frame(self.window)
+        self.__frame1.grid(row=0, column=0, rowspan=2)
+        self.__frame1.config(pady=20, bg="black")
+
+        self.__frame2 = Frame(self.window)
+        self.__frame2.grid(row=boardSize, column=0)
+        self.__frame2.config(padx=5, pady=5)
+
+        self.__nbText = StringVar()
+        self.__nbText.set("Player " + str(self.player))
+        self.__text1 = Label(self.__frame2, textvariable=self.__nbText)
+        self.__text1.pack()
+
+        self.buttons = [[Button(self.__frame1, width=4, height=2, command=lambda i=i, j=j: self.place_pion(i, j)) for j in range(boardSize)] for i in range(boardSize)]
         for i in range(boardSize):
             for j in range(boardSize):
                 self.buttons[i][j].grid(row=i, column=j)
