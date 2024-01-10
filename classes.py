@@ -4,26 +4,28 @@ class Pion:
     def __init__(self, abscisse, ordonnee, player):
         self.__x = abscisse
         self.__y = ordonnee
-        self.player = player
+        self.__player = player
 
     def getX(self):
         return self.__x
     def getY(self):
         return self.__y
-    def getPlayer(self):
-        return self.player
+
 
     def setX(self, newX):
         self.__x = newX
     def setY(self, newY):
         self.__y = newY
+    
+    def getPlayer(self):
+        return self.__player
+    
     def setPlayer(self, newPlayer):
-        self.player = newPlayer
+        self.__player = newPlayer
 
 
     def updatePlayer(self):
-        player = self.getPlayer()
-        if player == 1:
+        if self.getPlayer() == 1:
             self.setPlayer(2)
         else:
             self.setPlayer(1)
@@ -34,6 +36,9 @@ class Jeu:
         self.__boardSize = boardSize
         self.pion = pion
         self.__Board = self.plateau(boardSize)
+        
+    def getBoardsize(self):
+        return self.__boardSize
 
     def plateau(self, boardSize):
         board = []
@@ -45,16 +50,18 @@ class Jeu:
         return board
     
     def moveCondition(self):
-        boardSize = self.__boardSize
         x = self.pion.getX()
         y = self.pion.getY()
         possibleMove = []
         possibleCoords = [(2, 1), (2, -1), (-2, 1), (-2, -1), (1, 2), (1, -2), (-1, 2), (-1, -2)]
         for possibleCoordsX, possibleCoordsY in possibleCoords:
-            newX, newY = x +possibleCoordsX, y + possibleCoordsY
-            if 0 <= newX < boardSize and 0 <= newY < boardSize and self.__Board[newX][newY] == 0:
+            newX, newY = x + possibleCoordsX, y + possibleCoordsY
+            if 0 <= newX < self.getBoardsize() and 0 <= newY < self.getBoardsize() and self.__Board[newX][newY] == 0:
                 possibleMove.append((newX, newY))
         print(possibleMove)
+        print(self.__Board[newX][newY])
+        print(x, y)
+        print(pion.getPlayer())
         return possibleMove
     
     def updateBoard(self, x, y):
@@ -64,6 +71,7 @@ class Jeu:
                 self.__Board[x][y] = self.pion.getPlayer()
                 self.pion.setX(x)
                 self.pion.setY(y)
+                pion.updatePlayer()
                 return True
             else:
                 return False
