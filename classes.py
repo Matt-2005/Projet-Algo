@@ -33,6 +33,8 @@ class Jeu:
         self.__boardSize = boardSize
         self.pion = pion
         self.__Board = self.plateau(boardSize)
+        self.possibleMoves = {1: [], 2: []}  # Dictionnaire pour stocker les coups possibles de chaque joueur
+
 
     def plateau(self, boardSize):
         board = []
@@ -58,17 +60,21 @@ class Jeu:
         return possibleMove
 
     
-    def updateBoard(self, x, y):
-        if (x, y) in self.moveCondition():
-            currentPlayer = self.pion.getPlayer()
+    def updateBoard(self, x, y, nbCoups):
+        currentPlayer = self.pion.getPlayer()
+        if nbCoups > 1 and (x, y) not in self.possibleMoves[currentPlayer]:
+            return False  # Si le coup n'est pas dans les coups possibles, il est invalide
+
+        if (x, y) in self.moveCondition() or nbCoups <= 1:  # Vérifie pour les deux premiers coups
             self.__Board[x][y] = currentPlayer
             self.pion.setX(x)
             self.pion.setY(y)
 
-            self.pion.updatePlayer()
-            nextPlayerMoves = self.moveCondition()
-            print(f"Possible moves for player {self.pion.getPlayer()}: {nextPlayerMoves}")
-            
+            # Mise à jour des coups possibles pour le joueur actuel
+            self.possibleMoves[currentPlayer] = self.moveCondition()
+            self.pion.updatePlayer()  # Change le joueur actif
+            self.nbCoups += 1  # Incrémenter le compteur de coups
+
             return True
         return False
 
@@ -121,7 +127,7 @@ class GameInterface:
             self.pion.updatePlayer()
             self.nbCoups += 1 
         else:
-            if self.jeu.updateBoard(x, y) == True:
+            if self.jeu.updateBoard(x, y, self.nbCoups):
                 if self.pion.getPlayer() == 1:
                     self.buttons[x][y].config(bg='green')
                 else:
