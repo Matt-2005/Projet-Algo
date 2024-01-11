@@ -65,9 +65,8 @@ class Jeu:
             self.pion.setX(x)
             self.pion.setY(y)
 
-            # Mise à jour de l'état de jeu pour le prochain joueur
-            self.pion.updatePlayer()  # Change le joueur actif
-            nextPlayerMoves = self.moveCondition()  # Calcule les coups possibles pour le joueur suivant
+            self.pion.updatePlayer()
+            nextPlayerMoves = self.moveCondition()
             print(f"Possible moves for player {self.pion.getPlayer()}: {nextPlayerMoves}")
             
             return True
@@ -79,6 +78,7 @@ class GameInterface:
         self.pion = Pion()
         self.jeu = Jeu(boardSize, self.pion)
         self.player = 1
+        self.nbCoups = 0
 
         self.window = Tk()
         self.window.title("Jeu de Puissance 5")
@@ -107,21 +107,28 @@ class GameInterface:
 
     def debutJeu(self):
         print("Début du jeu. Les joueurs peuvent placer leur premier pion où ils veulent.")
+        
+    
 
     def place_pion(self, x, y):
-        if self.pion.getX() == -1 and self.pion.getY() == -1:
+        if self.nbCoups < 2:
             self.pion.setX(x)
             self.pion.setY(y)
-            player = self.pion.getPlayer()
-            if player == 1:
+            if self.pion.getPlayer() == 1:
                 self.buttons[x][y].config(bg='green')
             else:
                 self.buttons[x][y].config(bg='blue')
             self.pion.updatePlayer()
+            self.nbCoups += 1 
         else:
-            if self.jeu.updateBoard(x, y):
-                self.buttons[x][y].config(bg='green' if self.pion.getPlayer() == 1 else 'blue')
+            if self.jeu.updateBoard(x, y) == True:
+                if self.pion.getPlayer() == 1:
+                    self.buttons[x][y].config(bg='green')
+                else:
+                    self.buttons[x][y].config(bg='blue')
                 self.pion.updatePlayer()
             else:
                 self.buttons[x][y].config(bg='red')
+                
+                
 game = GameInterface(10)
