@@ -30,7 +30,7 @@ class Jeu:
         self.__boardSize = boardSize
         self.pion = pion
         self.__Board = self.plateau(boardSize)
-        self.possibleMoves = {1: [], 2: []}  # Dictionnaire pour stocker les coups possibles de chaque joueur
+        self.possibleMoves = {0: [], 1: []}  # Dictionnaire pour stocker les coups possibles de chaque joueur
 
 
     def plateau(self, boardSize):
