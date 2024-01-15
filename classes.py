@@ -30,7 +30,8 @@ class Jeu:
         self.__boardSize = boardSize
         self.pion = pion
         self.__Board = self.plateau(boardSize)
-        self.possibleMoves = {0: [], 1: []} 
+        self.coords = {0: [], 1: []} 
+        self.possibleMoves = {0: [], 1: []}
 
 
     def plateau(self, boardSize):
@@ -44,17 +45,16 @@ class Jeu:
 
 
     def moveCondition(self):
-        x = self.pion.getX()
-        y = self.pion.getY()
-        possibleMove = []
+        x = self.coords[self.pion.getPlayer()][0][0]
+        y = self.coords[self.pion.getPlayer()][1][1]
         possibleCoords = [(2, 1), (2, -1), (-2, 1), (-2, -1), (1, 2), (1, -2), (-1, 2), (-1, -2)]
         for possibleCoordsX, possibleCoordsY in possibleCoords:
             newX, newY = x + possibleCoordsX, y + possibleCoordsY
             if 0 <= newX < self.__boardSize and 0 <= newY < self.__boardSize and self.__Board[newX][newY] == 0:
-                possibleMove.append((newX, newY))
-        print(possibleMove)
+                self.possibleMoves[self.pion.getPlayer()].append((newX, newY))
+        print(self.possibleMoves[self.pion.getPlayer()])
         print(self.pion.getPlayer())
-        return possibleMove
+        return self.possibleMoves[self.pion.getPlayer()]
 
     
     def updateBoard(self, x, y, nbCoups):
@@ -117,8 +117,12 @@ class GameInterface:
             self.pion.setY(y)
             if self.pion.getPlayer() == 0:
                 self.buttons[x][y].config(bg='green')
+                self.jeu.coords[0].append((x, y))
+                self.jeu.possibleMoves[0] = self.jeu.moveCondition()
             else:
                 self.buttons[x][y].config(bg='blue')
+                self.jeu.coords[1].append((x, y))
+                self.jeu.possibleMoves[1] = self.jeu.moveCondition()
             self.pion.updatePlayer()
             self.nbCoups += 1 
         else:
