@@ -1,7 +1,7 @@
 from tkinter import *
 
 class Pion:
-    def __init__(self, abscisse = -1, ordonnee = -1, player = 1):
+    def __init__(self, abscisse = -1, ordonnee = -1, player = 0):
         self.__x = abscisse
         self.__y = ordonnee
         self.__player = player
@@ -23,10 +23,7 @@ class Pion:
         self.__player = newPlayer
 
     def updatePlayer(self):
-        if self.__player == 1:
-            self.setPlayer(2)
-        else:
-            self.setPlayer(1)
+        self.__player = (self.__player + 1) % 2
 
 class Jeu:
     def __init__(self, boardSize, pion):
@@ -83,7 +80,6 @@ class GameInterface:
         self.boardSize = boardSize
         self.pion = Pion()
         self.jeu = Jeu(boardSize, self.pion)
-        self.player = 1
         self.nbCoups = 0
 
         self.window = Tk()
@@ -99,7 +95,7 @@ class GameInterface:
         self.__frame2.config(padx=5, pady=5)
 
         self.__nbText = StringVar()
-        self.__nbText.set("Player " + str(self.player))
+        self.__nbText.set("Player " + str(self.pion.getPlayer() + 1))
         self.__text1 = Label(self.__frame2, textvariable=self.__nbText)
         self.__text1.pack()
 
@@ -120,7 +116,7 @@ class GameInterface:
         if self.nbCoups < 2:
             self.pion.setX(x)
             self.pion.setY(y)
-            if self.pion.getPlayer() == 1:
+            if self.pion.getPlayer() == 0:
                 self.buttons[x][y].config(bg='green')
             else:
                 self.buttons[x][y].config(bg='blue')
@@ -128,7 +124,7 @@ class GameInterface:
             self.nbCoups += 1 
         else:
             if self.jeu.updateBoard(x, y, self.nbCoups):
-                if self.pion.getPlayer() == 1:
+                if self.pion.getPlayer() == 0:
                     self.buttons[x][y].config(bg='green')
                 else:
                     self.buttons[x][y].config(bg='blue')
