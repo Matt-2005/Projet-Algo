@@ -25,6 +25,7 @@ class Pion:
     def updatePlayer(self):
         self.__player = (self.__player + 1) % 2
 
+
 class Jeu:
     def __init__(self, boardSize, pion):
         self.__boardSize = boardSize
@@ -64,7 +65,36 @@ class Jeu:
         return self.possibleMoves[currentPlayer]
 
 
+    def winCondition(self):
+        boardSize = self.__boardSize
+        rows, cols = len(boardSize), len(boardSize)
+        currentPlayer = self.pion.getPlayer()
 
+        # Vérif horizontale
+        for row in range(rows):
+            for col in range(cols - boardSize):
+                if all(self.__Board[row][col + i] == currentPlayer for i in range(5)):
+                    return True
+
+        # Vérif verticale
+        for row in range(rows - boardSize):
+            for col in range(cols):
+                if all(self.__Board[row + i][col] == currentPlayer for i in range(5)):
+                    return True
+
+        # Vérif diagonale (\)
+        for row in range(rows - boardSize):
+            for col in range(cols - boardSize):
+                if all(self.__Board[row + i][col + i] == currentPlayer for i in range(5)):
+                    return True
+
+        # Vérif diagonale (/)
+        for row in range(boardSize, rows):
+            for col in range(cols - boardSize):
+                if all(self.__Board[row - i][col + i] == currentPlayer for i in range(5)):
+                    return True
+        return False
+    
     
     def updateBoard(self, x, y, nbCoups):
         currentPlayer = self.pion.getPlayer()
@@ -78,6 +108,7 @@ class Jeu:
             nbCoups += 1
             return True
         return False
+    
 
 class GameInterface:
     def __init__(self, boardSize):
@@ -102,7 +133,7 @@ class GameInterface:
         self.__nbText.set("Player " + str(self.pion.getPlayer() + 1))
         self.__text1 = Label(self.__frame2, textvariable=self.__nbText, width=10, height=2, bg='black', fg='white')
         self.__text1.pack()
-        self.buttons = [[Button(self.__frame1, width=6, height=3, bg='black', command=lambda i=i, j=j: self.place_pion(i, j)) for j in range(boardSize)] for i in range(boardSize)]
+        self.buttons = [[Button(self.__frame1, width=6, height=3, bg='black', command=lambda i=i, j=j: self.placePion(i, j)) for j in range(boardSize)] for i in range(boardSize)]
         for i in range(boardSize):
             for j in range(boardSize):
                 self.buttons[i][j].grid(row=i, column=j)
@@ -110,13 +141,21 @@ class GameInterface:
 
         self.window.mainloop()
 
+
     def debutJeu(self):
         print("Début du jeu. Les joueurs peuvent placer leur premier pion où ils veulent.")
 
-    def restore_color(self, x, y):
+
+    def finJeu(self):
+        if self.Jeu.winCondition() == True: # Jarrive pas à ramener la fonction winCondition ici :/
+            print("Player " + str(self.pion.getPlayer() + 1) + "wins")
+
+
+    def restoreColor(self, x, y):
         self.buttons[x][y].config(bg='black')
 
-    def place_pion(self, x, y):
+
+    def placePion(self, x, y):
         currentPlayer = self.pion.getPlayer()
         coupValide = False
 
@@ -143,7 +182,7 @@ class GameInterface:
                 coupValide = True
             else:
                 self.buttons[x][y].config(bg='red')
-                self.buttons[x][y].after(1000, self.restore_color(x, y))
+                self.buttons[x][y].after(1000, self.restoreColor(x, y))
                 print("Mouvement invalide, veuillez réessayer.")
 
         if coupValide == True:
@@ -151,6 +190,8 @@ class GameInterface:
             self.pion.updatePlayer()
             self.nbCoups += 1
             self.__nbText.set(f"Player {currentPlayer + 1}")
+            self.finJeu()
+            
                 
 tailleJeu = int(input("Taille du plateau (entre 8 et 12) : "))
 
