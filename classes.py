@@ -112,8 +112,9 @@ class GameInterface:
 
     def debutJeu(self):
         print("Début du jeu. Les joueurs peuvent placer leur premier pion où ils veulent.")
-        
-    
+
+    def restore_color(self, x, y):
+        self.buttons[x][y].config(bg='black')
 
     def place_pion(self, x, y):
         currentPlayer = self.pion.getPlayer()
@@ -142,6 +143,7 @@ class GameInterface:
                 coupValide = True
             else:
                 self.buttons[x][y].config(bg='red')
+                self.buttons[x][y].after(1000, self.restore_color(x, y))
                 print("Mouvement invalide, veuillez réessayer.")
 
         if coupValide == True:
