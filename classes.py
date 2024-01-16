@@ -75,10 +75,7 @@ class Jeu:
             self.__Board[x][y] = currentPlayer
             self.pion.setX(x)
             self.pion.setY(y)
-
-            self.possibleMoves[currentPlayer] = self.moveCondition()
             nbCoups += 1
-
             return True
         return False
 
@@ -120,16 +117,19 @@ class GameInterface:
     
 
     def place_pion(self, x, y):
+        currentPlayer = self.pion.getPlayer()
         if self.nbCoups < 2:
             self.pion.setX(x)
             self.pion.setY(y)
             if self.pion.getPlayer() == 0:
                 self.buttons[x][y].config(bg='green')
-                self.jeu.coords[0].append((x, y))
+                self.jeu.coords[0] = [(x, y)]
+                self.jeu.possibleMoves[currentPlayer] = []
                 self.jeu.possibleMoves[0] = self.jeu.moveCondition()
             else:
                 self.buttons[x][y].config(bg='blue')
-                self.jeu.coords[1].append((x, y))
+                self.jeu.coords[1] = [(x, y)]
+                self.jeu.possibleMoves[currentPlayer] = []
                 self.jeu.possibleMoves[1] = self.jeu.moveCondition()
             self.pion.updatePlayer()
             self.nbCoups += 1 
@@ -137,11 +137,17 @@ class GameInterface:
             if self.pion.getPlayer() == 0:
                 if self.jeu.updateBoard(x, y, self.nbCoups):
                     self.buttons[x][y].config(bg='green')
+                    self.jeu.coords[0] = [(x, y)]
+                    self.jeu.possibleMoves[currentPlayer] = []
+                    self.jeu.possibleMoves[0] = self.jeu.moveCondition()
                 else:
                     self.buttons[x][y].config(bg='red')
             else:
                 if self.jeu.updateBoard(x, y, self.nbCoups):
                     self.buttons[x][y].config(bg='blue')
+                    self.jeu.coords[1] = [(x, y)]
+                    self.jeu.possibleMoves[currentPlayer] = []
+                    self.jeu.possibleMoves[1] = self.jeu.moveCondition()
                 else:
                     self.buttons[x][y].config(bg='red')
             self.pion.updatePlayer()
