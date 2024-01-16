@@ -100,10 +100,9 @@ class GameInterface:
 
         self.__nbText = StringVar()
         self.__nbText.set("Player " + str(self.pion.getPlayer() + 1))
-        self.__text1 = Label(self.__frame2, textvariable=self.__nbText)
+        self.__text1 = Label(self.__frame2, textvariable=self.__nbText, width=10, height=2, bg='black', fg='white')
         self.__text1.pack()
-
-        self.buttons = [[Button(self.__frame1, width=4, height=2, command=lambda i=i, j=j: self.place_pion(i, j)) for j in range(boardSize)] for i in range(boardSize)]
+        self.buttons = [[Button(self.__frame1, width=6, height=3, bg='black', command=lambda i=i, j=j: self.place_pion(i, j)) for j in range(boardSize)] for i in range(boardSize)]
         for i in range(boardSize):
             for j in range(boardSize):
                 self.buttons[i][j].grid(row=i, column=j)
@@ -145,9 +144,16 @@ class GameInterface:
                 self.buttons[x][y].config(bg='red')
                 print("Mouvement invalide, veuillez réessayer.")
 
-        if coupValide:
+        if coupValide == True:
+            currentPlayer = self.pion.getPlayer()
             self.pion.updatePlayer()
             self.nbCoups += 1
+            self.__nbText.set(f"Player {currentPlayer + 1}")
                 
-                
-game = GameInterface(10)
+tailleJeu = int(input("Taille du plateau (entre 8 et 12) : "))
+
+while tailleJeu < 8 or tailleJeu > 12:
+    print("Erreur : La taille doit être entre 8 et 12.")
+    tailleJeu = int(input("Taille du plateau (entre 8 et 12) : "))
+
+game = GameInterface(tailleJeu)
