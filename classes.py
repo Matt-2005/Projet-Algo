@@ -118,39 +118,36 @@ class GameInterface:
 
     def place_pion(self, x, y):
         currentPlayer = self.pion.getPlayer()
+        coupValide = False
+
         if self.nbCoups < 2:
             self.pion.setX(x)
             self.pion.setY(y)
-            if self.pion.getPlayer() == 0:
+            if currentPlayer == 0:
                 self.buttons[x][y].config(bg='green')
-                self.jeu.coords[0] = [(x, y)]
-                self.jeu.possibleMoves[currentPlayer] = []
-                self.jeu.possibleMoves[0] = self.jeu.moveCondition()
             else:
                 self.buttons[x][y].config(bg='blue')
-                self.jeu.coords[1] = [(x, y)]
-                self.jeu.possibleMoves[currentPlayer] = []
-                self.jeu.possibleMoves[1] = self.jeu.moveCondition()
-            self.pion.updatePlayer()
-            self.nbCoups += 1 
+            self.jeu.coords[currentPlayer] = [(x, y)]
+            self.jeu.possibleMoves[currentPlayer] = []
+            self.jeu.possibleMoves[currentPlayer] = self.jeu.moveCondition()
+            coupValide = True
         else:
-            if self.pion.getPlayer() == 0:
-                if self.jeu.updateBoard(x, y, self.nbCoups):
+            if self.jeu.updateBoard(x, y, self.nbCoups):
+                if currentPlayer == 0:
                     self.buttons[x][y].config(bg='green')
-                    self.jeu.coords[0] = [(x, y)]
-                    self.jeu.possibleMoves[currentPlayer] = []
-                    self.jeu.possibleMoves[0] = self.jeu.moveCondition()
                 else:
-                    self.buttons[x][y].config(bg='red')
-            else:
-                if self.jeu.updateBoard(x, y, self.nbCoups):
                     self.buttons[x][y].config(bg='blue')
-                    self.jeu.coords[1] = [(x, y)]
-                    self.jeu.possibleMoves[currentPlayer] = []
-                    self.jeu.possibleMoves[1] = self.jeu.moveCondition()
-                else:
-                    self.buttons[x][y].config(bg='red')
+                self.jeu.coords[currentPlayer] = [(x, y)]
+                self.jeu.possibleMoves[currentPlayer] = []
+                self.jeu.possibleMoves[currentPlayer] = self.jeu.moveCondition()
+                coupValide = True
+            else:
+                self.buttons[x][y].config(bg='red')
+                print("Mouvement invalide, veuillez réessayer.")
+
+        if coupValide:
             self.pion.updatePlayer()
+            self.nbCoups += 1
                 
                 
 game = GameInterface(10)
