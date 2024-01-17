@@ -72,28 +72,29 @@ class Jeu:
 
         # Vérif horizontale
         for row in range(rows):
-            for col in range(cols - boardSize):
+            for col in range(cols - 4):  # Change here
                 if all(self.__Board[row][col + i] == currentPlayer for i in range(5)):
                     return True
 
         # Vérif verticale
-        for row in range(rows - boardSize):
+        for row in range(rows - 4):  # Change here
             for col in range(cols):
                 if all(self.__Board[row + i][col] == currentPlayer for i in range(5)):
                     return True
 
         # Vérif diagonale (\)
-        for row in range(rows - boardSize):
-            for col in range(cols - boardSize):
+        for row in range(rows - 4):  # Change here
+            for col in range(cols - 4):  # Change here
                 if all(self.__Board[row + i][col + i] == currentPlayer for i in range(5)):
                     return True
 
         # Vérif diagonale (/)
-        for row in range(boardSize, rows):
-            for col in range(cols - boardSize):
+        for row in range(4, rows):  # Change here
+            for col in range(cols - 4):  # Change here
                 if all(self.__Board[row - i][col + i] == currentPlayer for i in range(5)):
                     return True
         return False
+
     
     
     def updateBoard(self, x, y, nbCoups):
