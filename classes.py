@@ -27,13 +27,12 @@ class Pion:
 
 
 class Jeu:
-    def __init__(self, boardSize, pion, alignement):
+    def __init__(self, boardSize, pion):
         self.__boardSize = boardSize
         self.pion = pion
         self.__Board = self.plateau(boardSize)
         self.coords = {0: [], 1: []} 
         self.possibleMoves = {0: [], 1: []}
-        self.alignement = alignement
 
 
     def plateau(self, boardSize):
@@ -69,41 +68,38 @@ class Jeu:
     def winCondition(self):
         boardSize = self.__boardSize
         rows, cols = boardSize, boardSize
-        alignement = 5  # ou une autre valeur selon votre jeu
         currentPlayer = self.pion.getPlayer()
 
-        # Ajouter des instructions print pour le débogage
-        print(f"Vérification de la condition de victoire pour le joueur {currentPlayer}")
-
-        # Vérif horizontale
+        # Vérification horizontale
         for row in range(rows):
             for col in range(cols - alignement + 1):
-                if all(self.__Board[row][col + i] == currentPlayer for i in range(alignement)):
-                    print("Victoire horizontale détectée")
+                if all(self.__Board[row][col + i] == currentPlayer + 1 for i in range(alignement)):
+                    print(f"Victoire horizontale détectée en ligne {row}, colonne {col} à {col + alignement - 1}")
                     return True
 
-        # Vérif verticale
+        # Vérification verticale
         for row in range(rows - alignement + 1):
             for col in range(cols):
-                if all(self.__Board[row + i][col] == currentPlayer for i in range(alignement)):
-                    print("Victoire verticale détectée")
+                if all(self.__Board[row + i][col] == currentPlayer + 1 for i in range(alignement)):
+                    print(f"Victoire verticale détectée en ligne {row} à {row + alignement - 1}, colonne {col}")
                     return True
 
-        # Vérif diagonale (\)
+        # Vérification diagonale (\)
         for row in range(rows - alignement + 1):
             for col in range(cols - alignement + 1):
-                if all(self.__Board[row + i][col + i] == currentPlayer for i in range(alignement)):
-                    print("Victoire diagonale (\\) détectée")
+                if all(self.__Board[row + i][col + i] == currentPlayer + 1 for i in range(alignement)):
+                    print(f"Victoire diagonale (\\) détectée de ({row}, {col}) à ({row + alignement - 1}, {col + alignement - 1})")
                     return True
 
-        # Vérif diagonale (/)
+        # Vérification diagonale (/)
         for row in range(alignement - 1, rows):
             for col in range(cols - alignement + 1):
-                if all(self.__Board[row - i][col + i] == currentPlayer for i in range(alignement)):
-                    print("Victoire diagonale (/) détectée")
+                if all(self.__Board[row - i][col + i] == currentPlayer + 1 for i in range(alignement)):
+                    print(f"Victoire diagonale (/) détectée de ({row}, {col}) à ({row - alignement + 1}, {col + alignement - 1})")
                     return True
 
         return False
+
 
 
     
@@ -114,7 +110,7 @@ class Jeu:
             return False
 
         if (x, y) in self.moveCondition() or nbCoups <= 1: 
-            self.__Board[x][y] = currentPlayer
+            self.__Board[x][y] = currentPlayer + 1
             self.pion.setX(x)
             self.pion.setY(y)
             nbCoups += 1
@@ -123,10 +119,10 @@ class Jeu:
     
 
 class GameInterface:
-    def __init__(self, boardSize, alignement):
+    def __init__(self, boardSize):
         self.boardSize = boardSize
         self.pion = Pion()
-        self.jeu = Jeu(boardSize, self.pion, alignement)
+        self.jeu = Jeu(boardSize, self.pion)
         self.nbCoups = 0
         
 
@@ -194,8 +190,7 @@ class GameInterface:
                 self.jeu.possibleMoves[currentPlayer] = self.jeu.moveCondition()
                 coupValide = True
             else:
-                self.buttons[x][y].config(bg='red')
-                self.buttons[x][y].after(1000, self.restoreColor(x, y))
+                self.buttons[x][y].after(500, self.restoreColor(x, y))
                 print("Mouvement invalide, veuillez réessayer.")
 
         if coupValide == True:
@@ -210,10 +205,10 @@ tailleJeu = int(input("Taille du plateau (entre 8 et 12) : "))
 while tailleJeu < 8 or tailleJeu > 12:
     print("Erreur : La taille doit être entre 8 et 12.")
     tailleJeu = int(input("Taille du plateau (entre 8 et 12) : "))
-    
+
 alignement = int(input("Nombre d'alignement pour gagner (entre 4 et 6) : "))
 while alignement < 4 or alignement > 6:
     print("Erreur : Le nombre d'alignement doit être entre 4 et 6.")
     alignement = int(input("Nombre d'alignement pour gagner (entre 4 et 6) : "))
 
-game = GameInterface(tailleJeu, alignement)
+game = GameInterface(tailleJeu)
