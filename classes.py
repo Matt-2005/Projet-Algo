@@ -128,7 +128,8 @@ class GameInterface:
         self.pion = Pion()
         self.jeu = Jeu(boardSize, self.pion, alignement)
         self.nbCoups = 0
-        
+        self.lastButton1 = None
+        self.lastButton2 = None
 
         self.window = Tk()
         self.window.title("Jeu de Puissance 5")
@@ -146,7 +147,9 @@ class GameInterface:
         self.__nbText.set("Player " + str(self.pion.getPlayer() + 1))
         self.__text1 = Label(self.__frame2, textvariable=self.__nbText, width=10, height=2, bg='black', fg='white')
         self.__text1.pack()
-        self.buttons = [[Button(self.__frame1, width=6, height=3, bg='black', command=lambda i=i, j=j: self.placePion(i, j)) for j in range(boardSize)] for i in range(boardSize)]
+        self.buttons = [
+            [Button(self.__frame1, width=6, height=3, bg='black', command=lambda i=i, j=j: self.placePion(i, j)) for j
+             in range(boardSize)] for i in range(boardSize)]
         for i in range(boardSize):
             for j in range(boardSize):
                 self.buttons[i][j].grid(row=i, column=j)
@@ -154,19 +157,21 @@ class GameInterface:
 
         self.window.mainloop()
 
-
     def debutJeu(self):
         print("Début du jeu. Les joueurs peuvent placer leur premier pion où ils veulent.")
 
-
     def finJeu(self):
-        if self.jeu.winCondition() == True: # Jarrive pas à ramener la fonction winCondition ici :/
+        if self.jeu.winCondition() == True:  # Jarrive pas à ramener la fonction winCondition ici :/
             print("Player " + str(self.pion.getPlayer() + 1) + " wins !")
-
 
     def restoreColor(self, x, y):
         self.buttons[x][y].config(bg='black')
 
+    def changeColorPlayer1(self):
+        self.lastButton1.config(bg='green')
+
+    def changeColorPlayer2(self):
+        self.lastButton2.config(bg='blue')
 
     def placePion(self, x, y):
         currentPlayer = self.pion.getPlayer()
@@ -176,9 +181,11 @@ class GameInterface:
             self.pion.setX(x)
             self.pion.setY(y)
             if currentPlayer == 0:
-                self.buttons[x][y].config(bg='green')
+                self.buttons[x][y].config(bg='#3FEE3C')
+                self.lastButton1 = self.buttons[x][y]
             else:
-                self.buttons[x][y].config(bg='blue')
+                self.buttons[x][y].config(bg='#31B3F0')
+                self.lastButton2 = self.buttons[x][y]
             self.jeu.coords[currentPlayer] = [(x, y)]
             self.jeu.possibleMoves[currentPlayer] = []
             self.jeu.possibleMoves[currentPlayer] = self.jeu.moveCondition()
@@ -186,9 +193,13 @@ class GameInterface:
         else:
             if self.jeu.updateBoard(x, y, self.nbCoups):
                 if currentPlayer == 0:
-                    self.buttons[x][y].config(bg='green')
+                    self.buttons[x][y].config(bg='#3FEE3C')
+                    self.changeColorPlayer1()
+                    self.lastButton1 = self.buttons[x][y]
                 else:
-                    self.buttons[x][y].config(bg='blue')
+                    self.buttons[x][y].config(bg='#31B3F0')
+                    self.changeColorPlayer2()
+                    self.lastButton2 = self.buttons[x][y]
                 self.jeu.coords[currentPlayer] = [(x, y)]
                 self.jeu.possibleMoves[currentPlayer] = []
                 self.jeu.possibleMoves[currentPlayer] = self.jeu.moveCondition()
