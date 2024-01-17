@@ -27,12 +27,13 @@ class Pion:
 
 
 class Jeu:
-    def __init__(self, boardSize, pion):
+    def __init__(self, boardSize, pion, alignement):
         self.__boardSize = boardSize
         self.pion = pion
         self.__Board = self.plateau(boardSize)
         self.coords = {0: [], 1: []} 
         self.possibleMoves = {0: [], 1: []}
+        self.alignement = alignement
 
 
     def plateau(self, boardSize):
@@ -68,32 +69,42 @@ class Jeu:
     def winCondition(self):
         boardSize = self.__boardSize
         rows, cols = boardSize, boardSize
+        alignement = 5  # ou une autre valeur selon votre jeu
         currentPlayer = self.pion.getPlayer()
+
+        # Ajouter des instructions print pour le débogage
+        print(f"Vérification de la condition de victoire pour le joueur {currentPlayer}")
 
         # Vérif horizontale
         for row in range(rows):
-            for col in range(cols - boardSize):  # Change here
+            for col in range(cols - alignement + 1):
                 if all(self.__Board[row][col + i] == currentPlayer for i in range(alignement)):
+                    print("Victoire horizontale détectée")
                     return True
 
         # Vérif verticale
-        for row in range(rows - boardSize):  # Change here
+        for row in range(rows - alignement + 1):
             for col in range(cols):
                 if all(self.__Board[row + i][col] == currentPlayer for i in range(alignement)):
+                    print("Victoire verticale détectée")
                     return True
 
         # Vérif diagonale (\)
-        for row in range(rows - boardSize):  # Change here
-            for col in range(cols - 4):  # Change here
+        for row in range(rows - alignement + 1):
+            for col in range(cols - alignement + 1):
                 if all(self.__Board[row + i][col + i] == currentPlayer for i in range(alignement)):
+                    print("Victoire diagonale (\\) détectée")
                     return True
 
         # Vérif diagonale (/)
-        for row in range(boardSize, rows):  # Change here
-            for col in range(cols - 4):  # Change here
+        for row in range(alignement - 1, rows):
+            for col in range(cols - alignement + 1):
                 if all(self.__Board[row - i][col + i] == currentPlayer for i in range(alignement)):
+                    print("Victoire diagonale (/) détectée")
                     return True
+
         return False
+
 
     
     
@@ -112,11 +123,12 @@ class Jeu:
     
 
 class GameInterface:
-    def __init__(self, boardSize):
+    def __init__(self, boardSize, alignement):
         self.boardSize = boardSize
         self.pion = Pion()
-        self.jeu = Jeu(boardSize, self.pion)
+        self.jeu = Jeu(boardSize, self.pion, alignement)
         self.nbCoups = 0
+        
 
         self.window = Tk()
         self.window.title("Jeu de Puissance 5")
@@ -149,7 +161,7 @@ class GameInterface:
 
     def finJeu(self):
         if self.jeu.winCondition() == True: # Jarrive pas à ramener la fonction winCondition ici :/
-            print("Player " + str(self.pion.getPlayer() + 1) + "wins")
+            print("Player " + str(self.pion.getPlayer() + 1) + " wins !")
 
 
     def restoreColor(self, x, y):
@@ -204,4 +216,4 @@ while alignement < 4 or alignement > 6:
     print("Erreur : Le nombre d'alignement doit être entre 4 et 6.")
     alignement = int(input("Nombre d'alignement pour gagner (entre 4 et 6) : "))
 
-game = GameInterface(tailleJeu)
+game = GameInterface(tailleJeu, alignement)
