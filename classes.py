@@ -67,7 +67,7 @@ class Jeu:
 
     def winCondition(self):
         boardSize = self.__boardSize
-        rows, cols = len(boardSize), len(boardSize)
+        rows, cols = boardSize, boardSize
         currentPlayer = self.pion.getPlayer()
 
         # Vérif horizontale
@@ -147,7 +147,7 @@ class GameInterface:
 
 
     def finJeu(self):
-        if self.Jeu.winCondition() == True: # Jarrive pas à ramener la fonction winCondition ici :/
+        if self.jeu.winCondition() == True: # Jarrive pas à ramener la fonction winCondition ici :/
             print("Player " + str(self.pion.getPlayer() + 1) + "wins")
 
 
