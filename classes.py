@@ -72,26 +72,26 @@ class Jeu:
 
         # Vérif horizontale
         for row in range(rows):
-            for col in range(cols - 4):  # Change here
-                if all(self.__Board[row][col + i] == currentPlayer for i in range(5)):
+            for col in range(cols - boardSize):  # Change here
+                if all(self.__Board[row][col + i] == currentPlayer for i in range(alignement)):
                     return True
 
         # Vérif verticale
-        for row in range(rows - 4):  # Change here
+        for row in range(rows - boardSize):  # Change here
             for col in range(cols):
-                if all(self.__Board[row + i][col] == currentPlayer for i in range(5)):
+                if all(self.__Board[row + i][col] == currentPlayer for i in range(alignement)):
                     return True
 
         # Vérif diagonale (\)
-        for row in range(rows - 4):  # Change here
+        for row in range(rows - boardSize):  # Change here
             for col in range(cols - 4):  # Change here
-                if all(self.__Board[row + i][col + i] == currentPlayer for i in range(5)):
+                if all(self.__Board[row + i][col + i] == currentPlayer for i in range(alignement)):
                     return True
 
         # Vérif diagonale (/)
-        for row in range(4, rows):  # Change here
+        for row in range(boardSize, rows):  # Change here
             for col in range(cols - 4):  # Change here
-                if all(self.__Board[row - i][col + i] == currentPlayer for i in range(5)):
+                if all(self.__Board[row - i][col + i] == currentPlayer for i in range(alignement)):
                     return True
         return False
 
@@ -195,9 +195,13 @@ class GameInterface:
             
                 
 tailleJeu = int(input("Taille du plateau (entre 8 et 12) : "))
-
 while tailleJeu < 8 or tailleJeu > 12:
     print("Erreur : La taille doit être entre 8 et 12.")
     tailleJeu = int(input("Taille du plateau (entre 8 et 12) : "))
+    
+alignement = int(input("Nombre d'alignement pour gagner (entre 4 et 6) : "))
+while alignement < 4 or alignement > 6:
+    print("Erreur : Le nombre d'alignement doit être entre 4 et 6.")
+    alignement = int(input("Nombre d'alignement pour gagner (entre 4 et 6) : "))
 
 game = GameInterface(tailleJeu)
