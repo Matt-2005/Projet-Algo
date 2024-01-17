@@ -73,36 +73,52 @@ class Jeu:
         # Vérification horizontale
         for row in range(rows):
             for col in range(cols - alignement + 1):
-                if all(self.__Board[row][col + i] == currentPlayer + 1 for i in range(alignement)):
+                victoire = True
+                for i in range(alignement):
+                    if self.__Board[row][col + i] != currentPlayer + 1:
+                        victoire = False
+                        break
+                if victoire:
                     print(f"Victoire horizontale détectée en ligne {row}, colonne {col} à {col + alignement - 1}")
                     return True
 
         # Vérification verticale
         for row in range(rows - alignement + 1):
             for col in range(cols):
-                if all(self.__Board[row + i][col] == currentPlayer + 1 for i in range(alignement)):
+                victoire = True
+                for i in range(alignement):
+                    if self.__Board[row + i][col] != currentPlayer + 1:
+                        victoire = False
+                        break
+                if victoire:
                     print(f"Victoire verticale détectée en ligne {row} à {row + alignement - 1}, colonne {col}")
                     return True
 
         # Vérification diagonale (\)
         for row in range(rows - alignement + 1):
             for col in range(cols - alignement + 1):
-                if all(self.__Board[row + i][col + i] == currentPlayer + 1 for i in range(alignement)):
+                victoire = True
+                for i in range(alignement):
+                    if self.__Board[row + i][col + i] != currentPlayer + 1:
+                        victoire = False
+                        break
+                if victoire:
                     print(f"Victoire diagonale (\\) détectée de ({row}, {col}) à ({row + alignement - 1}, {col + alignement - 1})")
                     return True
 
         # Vérification diagonale (/)
         for row in range(alignement - 1, rows):
             for col in range(cols - alignement + 1):
-                if all(self.__Board[row - i][col + i] == currentPlayer + 1 for i in range(alignement)):
+                victoire = True
+                for i in range(alignement):
+                    if self.__Board[row - i][col + i] != currentPlayer + 1:
+                        victoire = False
+                        break
+                if victoire:
                     print(f"Victoire diagonale (/) détectée de ({row}, {col}) à ({row - alignement + 1}, {col + alignement - 1})")
                     return True
 
         return False
-
-
-
-    
     
     def updateBoard(self, x, y, nbCoups):
         currentPlayer = self.pion.getPlayer()
@@ -140,12 +156,10 @@ class GameInterface:
         self.__frame2.config(padx=5, pady=5)
 
         self.__nbText = StringVar()
-        self.__nbText.set("Player " + str(self.pion.getPlayer() + 1))
+        self.__nbText.set("Player " + str(self.pion.getPlayer() + 3))
         self.__text1 = Label(self.__frame2, textvariable=self.__nbText, width=10, height=2, bg='black', fg='white')
         self.__text1.pack()
-        self.buttons = [
-            [Button(self.__frame1, width=6, height=3, bg='black', command=lambda i=i, j=j: self.placePion(i, j)) for j
-             in range(boardSize)] for i in range(boardSize)]
+        self.buttons = [[Button(self.__frame1, width=6, height=3, bg='black', command=lambda i=i, j=j: self.placePion(i, j)) for j  in range(boardSize)] for i in range(boardSize)]
         for i in range(boardSize):
             for j in range(boardSize):
                 self.buttons[i][j].grid(row=i, column=j)
@@ -155,10 +169,16 @@ class GameInterface:
 
     def debutJeu(self):
         print("Début du jeu. Les joueurs peuvent placer leur premier pion où ils veulent.")
+        
+    def disableButtons(self):
+        for row in self.buttons:
+            for button in row:
+                button.config(state=DISABLED)
 
     def finJeu(self):
-        if self.jeu.winCondition() == True:  # Jarrive pas à ramener la fonction winCondition ici :/
+        if self.jeu.winCondition() == True:
             print("Player " + str(self.pion.getPlayer() + 1) + " wins !")
+            self.disableButtons()
 
     def restoreColor(self, x, y):
         self.buttons[x][y].config(bg='black')
@@ -180,7 +200,7 @@ class GameInterface:
                 self.buttons[x][y].config(bg='#3FEE3C')
                 self.lastButton1 = self.buttons[x][y]
             else:
-                self.buttons[x][y].config(bg='#31B3F0')
+                self.buttons[x][y].config(bg='#2ddff3')
                 self.lastButton2 = self.buttons[x][y]
             self.jeu.coords[currentPlayer] = [(x, y)]
             self.jeu.possibleMoves[currentPlayer] = []
@@ -193,7 +213,7 @@ class GameInterface:
                     self.changeColorPlayer1()
                     self.lastButton1 = self.buttons[x][y]
                 else:
-                    self.buttons[x][y].config(bg='#31B3F0')
+                    self.buttons[x][y].config(bg='#2ddff3')
                     self.changeColorPlayer2()
                     self.lastButton2 = self.buttons[x][y]
                 self.jeu.coords[currentPlayer] = [(x, y)]
