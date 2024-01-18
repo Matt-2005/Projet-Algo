@@ -62,181 +62,181 @@ class Jeu:                                                                  # Cl
         return self.possibleMoves[currentPlayer]                                                                # Retourne la liste des mouvements possibles
 
 
-    def winCondition(self):
-        boardSize = self.__boardSize
-        rows, cols = boardSize, boardSize
-        currentPlayer = self.pion.getPlayer()
+    def winCondition(self):                                                 # Méthode qui vérifie si un joueur a gagné
+        boardSize = self.__boardSize                                        # Taille du plateau 
+        rows, cols = boardSize, boardSize                                   # Nombre de lignes et de colonnes du plateau               
+        currentPlayer = self.pion.getPlayer()                               # Joueur du pion
 
-        # Vérification horizontale
-        for row in range(rows):
-            for col in range(cols - alignement + 1):
-                victoire = True
-                for i in range(alignement):
-                    if self.__Board[row][col + i] != currentPlayer + 1:
-                        victoire = False
-                        break
-                if victoire:
-                    print(f"Victoire horizontale détectée en ligne {row}, colonne {col} à {col + alignement - 1}")
-                    return True
+        # Vérification de la victoire horizontale
+        for row in range(rows):                                             # Boucle qui parcourt les lignes du plateau
+            for col in range(cols - alignement + 1):                        # Boucle qui parcourt les colonnes du plateau
+                victoire = True                                             # assignation de la variable victoire à True pour chaque case
+                for i in range(alignement):                                 # Boucle qui parcourt les cases alignées                    
+                    if self.__Board[row][col + i] != currentPlayer + 1:     # Si la case d'apès n'est pas égale au joueur + 1 car pour la machine joueur = 0 ou 1 et pour l'humain joueur = 1 ou 2
+                        victoire = False                                    # assignation de la variable victoire à False car il n'y a pas de victoire
+                        break                                               # Sort de la boucle
+                if victoire:                                                # Si victoire = True
+                    print(f"Victoire horizontale détectée en ligne {row}, colonne {col} à {col + alignement - 1}") # Affiche la victoire horizontale
+                    return True                                             # Retourne True pour la suite du programme
 
-        # Vérification verticale
-        for row in range(rows - alignement + 1):
-            for col in range(cols):
-                victoire = True
-                for i in range(alignement):
-                    if self.__Board[row + i][col] != currentPlayer + 1:
-                        victoire = False
-                        break
-                if victoire:
-                    print(f"Victoire verticale détectée en ligne {row} à {row + alignement - 1}, colonne {col}")
-                    return True
+        # Vérification de la victoire verticale
+        for row in range(rows - alignement + 1):                            # Boucle qui parcourt les lignes du plateau
+            for col in range(cols):                                         # Boucle qui parcourt les colonnes du plateau    
+                victoire = True                                             # assignation de la variable victoire à True pour chaque case    
+                for i in range(alignement):                                 # Boucle qui parcourt les cases alignées
+                    if self.__Board[row + i][col] != currentPlayer + 1:     # Si la case d'en dessous n'est pas égale au joueur + 1 car pour la machine joueur = 0 ou 1 et pour l'humain joueur = 1 ou 2
+                        victoire = False                                    # assignation de la variable victoire à False car il n'y a pas de victoire
+                        break                                               # Sort de la boucle
+                if victoire:                                                # Si victoire = True
+                    print(f"Victoire verticale détectée en ligne {row}, à {row + alignement - 1}, colonne {col}") # Affiche la victoire verticale
+                    return True                                             # Retourne True pour la suite du programme
 
-        # Vérification diagonale (\)
-        for row in range(rows - alignement + 1):
-            for col in range(cols - alignement + 1):
-                victoire = True
-                for i in range(alignement):
-                    if self.__Board[row + i][col + i] != currentPlayer + 1:
-                        victoire = False
-                        break
-                if victoire:
-                    print(f"Victoire diagonale (\\) détectée de ({row}, {col}) à ({row + alignement - 1}, {col + alignement - 1})")
-                    return True
+        # Vérification de la victoire diagonale (\\)
+        for row in range(rows - alignement + 1):                            # Boucle qui parcourt les lignes du plateau
+            for col in range(cols - alignement + 1):                        # Boucle qui parcourt les colonnes du plateau   
+                victoire = True                                             # assignation de la variable victoire à True pour chaque case
+                for i in range(alignement):                                 # Boucle qui parcourt les cases alignées
+                    if self.__Board[row + i][col + i] != currentPlayer + 1: # Si la case d'apres, en dessous est pas égale au joueur + 1 car pour la machine joueur = 0 ou 1 et pour l'humain joueur = 1 ou 2
+                        victoire = False                                    # assignation de la variable victoire à False car il n'y a pas de victoire  
+                        break                                               # Sort de la boucle
+                if victoire:                                                # Si victoire = True
+                    print(f"Victoire diagonale (\\) détectée de ({row}, {col}) à ({row + alignement - 1}, {col + alignement - 1})") # Affiche la victoire diagonale (\\)
+                    return True                                             # Retourne True pour la suite du programme
 
-        # Vérification diagonale (/)
-        for row in range(alignement - 1, rows):
-            for col in range(cols - alignement + 1):
-                victoire = True
-                for i in range(alignement):
-                    if self.__Board[row - i][col + i] != currentPlayer + 1:
-                        victoire = False
-                        break
-                if victoire:
-                    print(f"Victoire diagonale (/) détectée de ({row}, {col}) à ({row - alignement + 1}, {col + alignement - 1})")
-                    return True
+        # Vérification de la victoire diagonale (//)
+        for row in range(alignement - 1, rows):                             # Boucle qui parcourt les lignes du plateau
+            for col in range(cols - alignement + 1):                        # Boucle qui parcourt les colonnes du plateau
+                victoire = True                                             # assignation de la variable victoire à True pour chaque case
+                for i in range(alignement):                                 # Boucle qui parcourt les cases alignées
+                    if self.__Board[row - i][col + i] != currentPlayer + 1: # Si la case d'après, au dessus est pas égale au joueur + 1 car pour la machine joueur = 0 ou 1 et pour l'humain joueur = 1 ou 2
+                        victoire = False                                    # assignation de la variable victoire à False car il n'y a pas de victoire
+                        break                                               # Sort de la boucle
+                if victoire:                                                # Si victoire = True
+                    print(f"Victoire diagonale (//) détectée de ({row}, {col}) à ({row - alignement + 1}, {col + alignement - 1})") # Affiche la victoire diagonale (//)
+                    return True                                             # Retourne True pour la suite du programme
 
-        return False
+        return False                                                        # Retourne False si il n'y a pas de victoire
     
-    def updateBoard(self, x, y, nbCoups):
-        currentPlayer = self.pion.getPlayer()
-        if nbCoups > 1 and (x, y) not in self.possibleMoves[currentPlayer]:
-            return False
+    def updateBoard(self, x, y, nbCoups):                                   # Méthode qui met à jour le plateau
+        currentPlayer = self.pion.getPlayer()                               # Joueur du pion
+        if nbCoups > 1 and (x, y) not in self.possibleMoves[currentPlayer]: # Si le nombre de coups est supérieur à 1 et que les coordonnées ne sont pas dans les mouvements possibles
+            return False                                                    # Retourne False
 
-        if (x, y) in self.moveCondition() or nbCoups <= 1: 
-            self.__Board[x][y] = currentPlayer + 1
-            self.pion.setX(x)
-            self.pion.setY(y)
-            nbCoups += 1
-            return True
-        return False
+        if (x, y) in self.moveCondition() or nbCoups <= 1:                  # Si les coordonnées sont dans les mouvements possibles ou si le nombre de coups est inférieur ou égal à 1
+            self.__Board[x][y] = currentPlayer + 1                          # Met à jour le plateau
+            self.pion.setX(x)                                               # Met à jour l'abscisse du pion
+            self.pion.setY(y)                                               # Met à jour l'ordonnée du pion    
+            nbCoups += 1                                                    # Incrémente le nombre de coups                     
+            return True                                                     # Retourne True      
+        return False                                                        # Retourne False si il n'y a pas de victoire
     
 
-class GameInterface:
-    def __init__(self, boardSize):
-        self.boardSize = boardSize
-        self.pion = Pion()
-        self.jeu = Jeu(boardSize, self.pion)
-        self.nbCoups = 0
-        self.lastButton1 = None
-        self.lastButton2 = None
+class GameInterface:                                                        # Classe GameInterface  
+    def __init__(self, boardSize):                                          # Constructeur de la classe GameInterface                         
+        self.boardSize = boardSize                                          # Taille du plateau               
+        self.pion = Pion()                                                  # Pion du jeu
+        self.jeu = Jeu(boardSize, self.pion)                                # Jeu                               
+        self.nbCoups = 0                                                    # Nombre de coups                               
+        self.lastButton1 = None                                             # Dernier bouton du joueur 1    
+        self.lastButton2 = None                                             # Dernier bouton du joueur 2
 
-        self.window = Tk()
-        self.window.title("Jeu de Puissance 5")
-        self.window.config(padx=20, pady=20, highlightthickness=0, bd=0, bg="black")
+        self.window = Tk()                                                  # Fenêtre du jeu                              
+        self.window.title("Jeu de Puissance 5")                             # Titre de la fenêtre                                
+        self.window.config(padx=20, pady=20, highlightthickness=0, bd=0, bg="black") # Configuration de la fenêtre
 
-        self.__frame1 = Frame(self.window)
-        self.__frame1.grid(row=0, column=0, rowspan=2)
-        self.__frame1.config(pady=20, bg="black")
+        self.__frame1 = Frame(self.window)                                  # Frame du plateau                            
+        self.__frame1.grid(row=0, column=0, rowspan=2)                      # Configuration du frame du plateau                    
+        self.__frame1.config(pady=20, bg="black")                           # Configuration du frame du plateau                        
 
-        self.__frame2 = Frame(self.window)
-        self.__frame2.grid(row=boardSize, column=0)
-        self.__frame2.config(padx=5, pady=5)
+        self.__frame2 = Frame(self.window)                                  # Frame du joueur                 
+        self.__frame2.grid(row=boardSize, column=0)                         # Configuration du frame du joueur               
+        self.__frame2.config(padx=2, pady=2)                                # Configuration du frame du joueur              
 
-        self.__nbText = StringVar()
-        self.__nbText.set("Player " + str(self.pion.getPlayer() + 3))
-        self.__text1 = Label(self.__frame2, textvariable=self.__nbText, width=10, height=2, bg='black', fg='white')
-        self.__text1.pack()
-        self.buttons = [[Button(self.__frame1, width=6, height=3, bg='black', command=lambda i=i, j=j: self.placePion(i, j)) for j  in range(boardSize)] for i in range(boardSize)]
-        for i in range(boardSize):
-            for j in range(boardSize):
-                self.buttons[i][j].grid(row=i, column=j)
-        self.debutJeu()
+        self.__nbText = StringVar()                                         # Texte du joueur   
+        self.__nbText.set("Player " + str(self.pion.getPlayer() + 3))       # Texte du joueur
+        self.__text1 = Label(self.__frame2, textvariable=self.__nbText, width=10, height=2, bg='black', fg='white') # Configuration du texte du joueur
+        self.__text1.pack()                                                 # Configuration du texte du joueur                           
+        self.buttons = [[Button(self.__frame1, width=6, height=3, bg='black', command=lambda i=i, j=j: self.placePion(i, j)) for j  in range(boardSize)] for i in range(boardSize)] # Configuration des boutons du plateau
+        for i in range(boardSize):                                          # Boucle qui parcourt les lignes du plateau
+            for j in range(boardSize):                                      # Boucle qui parcourt les colonnes du plateau
+                self.buttons[i][j].grid(row=i, column=j)                    # Configuration des boutons du plateau
+        self.debutJeu()                                                     # Début du jeu  
 
-        self.window.mainloop()
+        self.window.mainloop()                                              # Boucle principale de la fenêtre
 
-    def debutJeu(self):
-        print("Début du jeu. Les joueurs peuvent placer leur premier pion où ils veulent.")
+    def debutJeu(self):                                                     # Méthode qui démarre le jeu
+        print("Début du jeu. Les joueurs peuvent placer leur premier pion où ils veulent.") # Affiche le début du jeu
         
-    def disableButtons(self):
-        for row in self.buttons:
-            for button in row:
-                button.config(state=DISABLED)
+    def disableButtons(self):                                               # Méthode qui désactive les boutons
+        for row in self.buttons:                                            # Boucle qui parcourt les lignes du plateau              
+            for button in row:                                              # Boucle qui parcourt les boutons du plateau
+                button.config(state=DISABLED)                               # Désactive les boutons du plateau
 
-    def finJeu(self):
-        if self.jeu.winCondition() == True:
-            print("Player " + str(self.pion.getPlayer() + 1) + " wins !")
-            self.disableButtons()
+    def finJeu(self):                                                       # Méthode qui vérifie si un joueur a gagné
+        if self.jeu.winCondition() == True:                                 # Si un joueur a gagné
+            print("Player " + str(self.pion.getPlayer() + 1) + " wins !")   # Affiche le joueur qui a gagné
+            self.disableButtons()                                           # Désactive les boutons
 
-    def restoreColor(self, x, y):
-        self.buttons[x][y].config(bg='black')
+    def restoreColor(self, x, y):                                           # Méthode qui restaure la couleur des boutons
+        self.buttons[x][y].config(bg='black')                               # Restaure la couleur des boutons
 
-    def changeColorPlayer1(self):
-        self.lastButton1.config(bg='green')
+    def changeColorPlayer1(self):                                           # Méthode qui change la couleur du bouton du joueur 1
+        self.lastButton1.config(bg='green')                                 # Change la couleur du bouton du joueur 1
 
-    def changeColorPlayer2(self):
-        self.lastButton2.config(bg='blue')
+    def changeColorPlayer2(self):                                           # Méthode qui change la couleur du bouton du joueur 2
+        self.lastButton2.config(bg='blue')                                  # Change la couleur du bouton du joueur 2
 
-    def placePion(self, x, y):
-        currentPlayer = self.pion.getPlayer()
-        coupValide = False
+    def placePion(self, x, y):                                              # Méthode qui place le pion
+        currentPlayer = self.pion.getPlayer()                               # Joueur du pion
+        coupValide = False                                                  # Variable qui vérifie si le coup est valide
 
-        if self.nbCoups < 2:
-            self.pion.setX(x)
-            self.pion.setY(y)
-            if currentPlayer == 0:
-                self.buttons[x][y].config(bg='#3FEE3C')
-                self.lastButton1 = self.buttons[x][y]
-            else:
-                self.buttons[x][y].config(bg='#2ddff3')
-                self.lastButton2 = self.buttons[x][y]
-            self.jeu.coords[currentPlayer] = [(x, y)]
-            self.jeu.possibleMoves[currentPlayer] = []
-            self.jeu.possibleMoves[currentPlayer] = self.jeu.moveCondition()
-            coupValide = True
-        else:
-            if self.jeu.updateBoard(x, y, self.nbCoups):
-                if currentPlayer == 0:
-                    self.buttons[x][y].config(bg='#3FEE3C')
-                    self.changeColorPlayer1()
-                    self.lastButton1 = self.buttons[x][y]
-                else:
-                    self.buttons[x][y].config(bg='#2ddff3')
-                    self.changeColorPlayer2()
-                    self.lastButton2 = self.buttons[x][y]
-                self.jeu.coords[currentPlayer] = [(x, y)]
-                self.jeu.possibleMoves[currentPlayer] = []
-                self.jeu.possibleMoves[currentPlayer] = self.jeu.moveCondition()
-                coupValide = True
-            else:
-                self.buttons[x][y].after(500, self.restoreColor(x, y))
-                print("Mouvement invalide, veuillez réessayer.")
+        if self.nbCoups < 2:                                                # Si le nombre de coups est inférieur à 2 (premier coup et deuxième coup)
+            self.pion.setX(x)                                               # Met à jour l'abscisse du pion
+            self.pion.setY(y)                                               # Met à jour l'ordonnée du pion
+            if currentPlayer == 0:                                          # Si le joueur est le joueur 1
+                self.buttons[x][y].config(bg='#3FEE3C')                     # Change la couleur du bouton du joueur 1
+                self.lastButton1 = self.buttons[x][y]                       # Dernier bouton du joueur 1
+            else:                                                           # Sinon
+                self.buttons[x][y].config(bg='#2ddff3')                     # Change la couleur du bouton du joueur 2
+                self.lastButton2 = self.buttons[x][y]                       # Dernier bouton du joueur 2
+            self.jeu.coords[currentPlayer] = [(x, y)]                       # Met à jour les coordonnées du joueur
+            self.jeu.possibleMoves[currentPlayer] = []                      # Met à jour les mouvements possibles du joueur
+            self.jeu.possibleMoves[currentPlayer] = self.jeu.moveCondition()    # Met à jour les mouvements possibles du joueur
+            coupValide = True                                               # Le coup est valide
+        else:                                                               # Sinon                            
+            if self.jeu.updateBoard(x, y, self.nbCoups):                    # Si le plateau est mis à jour
+                if currentPlayer == 0:                                      # Si le joueur est le joueur 1
+                    self.buttons[x][y].config(bg='#3FEE3C')                 # Change la couleur du bouton du joueur 1
+                    self.changeColorPlayer1()                               # Change la couleur de l'ancien bouton du joueur 1              
+                    self.lastButton1 = self.buttons[x][y]                   # Dernier bouton du joueur 1
+                else:                                                       # Sinon
+                    self.buttons[x][y].config(bg='#2ddff3')                 # Change la couleur du bouton du joueur 2
+                    self.changeColorPlayer2()                               # Change la couleur de l'ancien bouton du joueur 2
+                    self.lastButton2 = self.buttons[x][y]                   # Dernier bouton du joueur 2
+                self.jeu.coords[currentPlayer] = [(x, y)]                   # Met à jour les coordonnées du joueur
+                self.jeu.possibleMoves[currentPlayer] = []                  # reset les mouvements possibles du joueur
+                self.jeu.possibleMoves[currentPlayer] = self.jeu.moveCondition() # Met à jour les mouvements possibles du joueur
+                coupValide = True                                           # Le coup est valide
+            else:                                                           # Sinon
+                self.buttons[x][y].after(500, self.restoreColor(x, y))      # Restaure la couleur du bouton après 500ms
+                print("Mouvement invalide, veuillez réessayer.")            # Affiche que le mouvement est invalide
 
-        if coupValide == True:
-            currentPlayer = self.pion.getPlayer()
-            self.pion.updatePlayer()
-            self.nbCoups += 1
-            self.__nbText.set(f"Player {currentPlayer + 1}")
-            self.finJeu()
+        if coupValide == True:                                              # Si le coup est valide
+            currentPlayer = self.pion.getPlayer()                           # Joueur du pion
+            self.pion.updatePlayer()                                        # Change le joueur du pion      
+            self.nbCoups += 1                                               # Incrémente le nombre de coups
+            self.__nbText.set(f"Player {currentPlayer + 1}")                # Met à jour le texte du joueur
+            self.finJeu()                                                   # Vérifie si un joueur a gagné
             
                 
-tailleJeu = int(input("Taille du plateau (entre 8 et 12) : "))
-while tailleJeu < 8 or tailleJeu > 12:
-    print("Erreur : La taille doit être entre 8 et 12.")
-    tailleJeu = int(input("Taille du plateau (entre 8 et 12) : "))
+tailleJeu = int(input("Taille du plateau (entre 8 et 12) : "))              # Taille du plateau
+while tailleJeu < 8 or tailleJeu > 12:                                      # Boucle qui vérifie si la taille du plateau est entre 8 et 12
+    print("Erreur : La taille doit être entre 8 et 12.")                    # Affiche une erreur
+    tailleJeu = int(input("Taille du plateau (entre 8 et 12) : "))          # Taille du plateau
 
-alignement = int(input("Nombre d'alignement pour gagner (entre 4 et 6) : "))
-while alignement < 4 or alignement > 6:
-    print("Erreur : Le nombre d'alignement doit être entre 4 et 6.")
-    alignement = int(input("Nombre d'alignement pour gagner (entre 4 et 6) : "))
+alignement = int(input("Nombre d'alignement pour gagner (entre 4 et 6) : "))    # Nombre d'alignement pour gagner
+while alignement < 4 or alignement > 6:                                         # Boucle qui vérifie si le nombre d'alignement est entre 4 et 6
+    print("Erreur : Le nombre d'alignement doit être entre 4 et 6.")            # Affiche une erreur
+    alignement = int(input("Nombre d'alignement pour gagner (entre 4 et 6) : "))# Nombre d'alignement pour gagner
 
-game = GameInterface(tailleJeu)
+game = GameInterface(tailleJeu)                                                 # Démarre le jeu
