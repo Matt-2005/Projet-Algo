@@ -130,9 +130,8 @@ class Jeu:                                                                  # Cl
             return True                                                     # Retourne True      
         return False                                                        # Retourne False si il n'y a pas de victoire
     
-
 class GameInterface:                                                        # Classe GameInterface  
-    def __init__(self, boardSize):                                          # Constructeur de la classe GameInterface                         
+    def __init__(self, boardSize):                                          # Constructeur de la classe GameInterface 
         self.boardSize = boardSize                                          # Taille du plateau               
         self.pion = Pion()                                                  # Pion du jeu
         self.jeu = Jeu(boardSize, self.pion)                                # Jeu                               
@@ -153,7 +152,7 @@ class GameInterface:                                                        # Cl
         self.__frame2.config(padx=2, pady=2)                                # Configuration du frame du joueur              
 
         self.__nbText = StringVar()                                         # Texte du joueur   
-        self.__nbText.set("Player " + str(self.pion.getPlayer() + 3))       # Texte du joueur
+        self.__nbText.set("Player " + str(self.jeu.pion.getPlayer() + 1))   # Texte du joueur
         self.__text1 = Label(self.__frame2, textvariable=self.__nbText, width=10, height=2, bg='black', fg='white') # Configuration du texte du joueur
         self.__text1.pack()                                                 # Configuration du texte du joueur                           
         self.buttons = [[Button(self.__frame1, width=6, height=3, bg='black', command=lambda i=i, j=j: self.placePion(i, j)) for j  in range(boardSize)] for i in range(boardSize)] # Configuration des boutons du plateau
@@ -166,7 +165,7 @@ class GameInterface:                                                        # Cl
 
     def debutJeu(self):                                                     # Méthode qui démarre le jeu
         print("Début du jeu. Les joueurs peuvent placer leur premier pion où ils veulent.") # Affiche le début du jeu
-        
+
     def disableButtons(self):                                               # Méthode qui désactive les boutons
         for row in self.buttons:                                            # Boucle qui parcourt les lignes du plateau              
             for button in row:                                              # Boucle qui parcourt les boutons du plateau
@@ -185,9 +184,7 @@ class GameInterface:                                                        # Cl
 
     def changeColorPlayer2(self):                                           # Méthode qui change la couleur du bouton du joueur 2
         self.lastButton2.config(bg='blue')                                  # Change la couleur du bouton du joueur 2
-
-    
-    
+        
     def placePion(self, x, y):                                              # Méthode qui place le pion
         currentPlayer = self.pion.getPlayer()                               # Joueur du pion
         coupValide = False                                                  # Variable qui vérifie si le coup est valide
@@ -224,16 +221,13 @@ class GameInterface:                                                        # Cl
                 print("Mouvement invalide, veuillez réessayer.")            # Affiche un message d'erreur
 
         if coupValide == True:                                              # Si le coup est valide
-            currentPlayer = self.pion.getPlayer()                           # Joueur du pion
-            self.pion.updatePlayer()                                        # Met à jour le joueur du pion
+            self.pion.updatePlayer()
+            nextPlayer = self.pion.getPlayer()                           # Joueur du pion
+            self.__nbText.set(f"Player {nextPlayer + 1}")                # Met à jour le texte du joueur
             self.nbCoups += 1                                               # Incrémente le nombre de coups
-            self.__nbText.set(f"Player {currentPlayer + 1}")                # Met à jour le texte du joueur
             self.finJeu()                                                   # Vérifie si un joueur a gagné 
             
         
-        
-            
-                
 tailleJeu = int(input("Taille du plateau (entre 8 et 12) : "))              # Taille du plateau
 while tailleJeu < 8 or tailleJeu > 12:                                      # Boucle qui vérifie si la taille du plateau est entre 8 et 12
     print("Erreur : La taille doit être entre 8 et 12.")                    # Affiche une erreur
@@ -243,5 +237,5 @@ alignement = int(input("Nombre d'alignement pour gagner (entre 4 et 6) : "))    
 while alignement < 4 or alignement > 6:                                         # Boucle qui vérifie si le nombre d'alignement est entre 4 et 6
     print("Erreur : Le nombre d'alignement doit être entre 4 et 6.")            # Affiche une erreur
     alignement = int(input("Nombre d'alignement pour gagner (entre 4 et 6) : "))# Nombre d'alignement pour gagner
-
+             
 game = GameInterface(tailleJeu)                                                 # Démarre le jeu
