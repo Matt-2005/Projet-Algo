@@ -24,7 +24,7 @@ class GameInterface:                                                        # Cl
         self.__frame2.config(padx=2, pady=2)                                # Configuration du frame du joueur              
 
         self.__nbText = StringVar()                                         # Texte du joueur   
-        self.__nbText.set("Player " + str(self.pion.getPlayer() + 3))       # Texte du joueur
+        self.__nbText.set("Player " + str(self.pion.getPlayer() + 1))       # Texte du joueur
         self.__text1 = Label(self.__frame2, textvariable=self.__nbText, width=10, height=2, bg='black', fg='white') # Configuration du texte du joueur
         self.__text1.pack()                                                 # Configuration du texte du joueur                           
         self.buttons = [[Button(self.__frame1, width=6, height=3, bg='black', command=lambda i=i, j=j: self.placePion(i, j)) for j  in range(boardSize)] for i in range(boardSize)] # Configuration des boutons du plateau
@@ -95,10 +95,10 @@ class GameInterface:                                                        # Cl
                 print("Mouvement invalide, veuillez réessayer.")            # Affiche un message d'erreur
 
         if coupValide == True:                                              # Si le coup est valide
-            currentPlayer = self.pion.getPlayer()                           # Joueur du pion
             self.pion.updatePlayer()                                        # Met à jour le joueur du pion
+            nextPlayer = self.pion.getPlayer()                              # Joueur du pion
+            self.__nbText.set(f"Player {nextPlayer + 1}")                   # Met à jour le texte du joueur
             self.nbCoups += 1                                               # Incrémente le nombre de coups
-            self.__nbText.set(f"Player {currentPlayer + 1}")                # Met à jour le texte du joueur
             self.finJeu()                                                   # Vérifie si un joueur a gagné 
 
             
