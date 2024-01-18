@@ -117,6 +117,7 @@ class Jeu:                                                                  # Cl
 
         return False                                                        # Retourne False si il n'y a pas de victoire
     
+    
     def updateBoard(self, x, y, nbCoups):                                   # Méthode qui met à jour le plateau
         currentPlayer = self.pion.getPlayer()                               # Joueur du pion
         if nbCoups > 1 and (x, y) not in self.possibleMoves[currentPlayer]: # Si le nombre de coups est supérieur à 1 et que les coordonnées ne sont pas dans les mouvements possibles
