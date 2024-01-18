@@ -186,11 +186,13 @@ class GameInterface:                                                        # Cl
     def changeColorPlayer2(self):                                           # Méthode qui change la couleur du bouton du joueur 2
         self.lastButton2.config(bg='blue')                                  # Change la couleur du bouton du joueur 2
 
+    
+    
     def placePion(self, x, y):                                              # Méthode qui place le pion
         currentPlayer = self.pion.getPlayer()                               # Joueur du pion
         coupValide = False                                                  # Variable qui vérifie si le coup est valide
 
-        if self.nbCoups < 2:                                                # Si le nombre de coups est inférieur à 2 (premier coup et deuxième coup)
+        if self.nbCoups < 2:                                                # Si le nombre de coups est inférieur à 2 (pour le premier et deuxième coup)
             self.pion.setX(x)                                               # Met à jour l'abscisse du pion
             self.pion.setY(y)                                               # Met à jour l'ordonnée du pion
             if currentPlayer == 0:                                          # Si le joueur est le joueur 1
@@ -201,32 +203,35 @@ class GameInterface:                                                        # Cl
                 self.lastButton2 = self.buttons[x][y]                       # Dernier bouton du joueur 2
             self.jeu.coords[currentPlayer] = [(x, y)]                       # Met à jour les coordonnées du joueur
             self.jeu.possibleMoves[currentPlayer] = []                      # Met à jour les mouvements possibles du joueur
-            self.jeu.possibleMoves[currentPlayer] = self.jeu.moveCondition()    # Met à jour les mouvements possibles du joueur
+            self.jeu.possibleMoves[currentPlayer] = self.jeu.moveCondition()# Met à jour les mouvements possibles du joueur   
             coupValide = True                                               # Le coup est valide
-        else:                                                               # Sinon                            
+        else:                                                               # Sinon
             if self.jeu.updateBoard(x, y, self.nbCoups):                    # Si le plateau est mis à jour
                 if currentPlayer == 0:                                      # Si le joueur est le joueur 1
                     self.buttons[x][y].config(bg='#3FEE3C')                 # Change la couleur du bouton du joueur 1
-                    self.changeColorPlayer1()                               # Change la couleur de l'ancien bouton du joueur 1              
+                    self.changeColorPlayer1()                               # Change la couleur du bouton du joueur 1
                     self.lastButton1 = self.buttons[x][y]                   # Dernier bouton du joueur 1
                 else:                                                       # Sinon
                     self.buttons[x][y].config(bg='#2ddff3')                 # Change la couleur du bouton du joueur 2
-                    self.changeColorPlayer2()                               # Change la couleur de l'ancien bouton du joueur 2
+                    self.changeColorPlayer2()                               # Change la couleur du bouton du joueur 2
                     self.lastButton2 = self.buttons[x][y]                   # Dernier bouton du joueur 2
                 self.jeu.coords[currentPlayer] = [(x, y)]                   # Met à jour les coordonnées du joueur
-                self.jeu.possibleMoves[currentPlayer] = []                  # reset les mouvements possibles du joueur
+                self.jeu.possibleMoves[currentPlayer] = []                  # Met à jour les mouvements possibles du joueur
                 self.jeu.possibleMoves[currentPlayer] = self.jeu.moveCondition() # Met à jour les mouvements possibles du joueur
                 coupValide = True                                           # Le coup est valide
             else:                                                           # Sinon
-                self.buttons[x][y].after(500, self.restoreColor(x, y))      # Restaure la couleur du bouton après 500ms
-                print("Mouvement invalide, veuillez réessayer.")            # Affiche que le mouvement est invalide
+                self.buttons[x][y].after(500, self.restoreColor(x, y))      # Restaure la couleur du bouton
+                print("Mouvement invalide, veuillez réessayer.")            # Affiche un message d'erreur
 
         if coupValide == True:                                              # Si le coup est valide
             currentPlayer = self.pion.getPlayer()                           # Joueur du pion
-            self.pion.updatePlayer()                                        # Change le joueur du pion      
+            self.pion.updatePlayer()                                        # Met à jour le joueur du pion
             self.nbCoups += 1                                               # Incrémente le nombre de coups
             self.__nbText.set(f"Player {currentPlayer + 1}")                # Met à jour le texte du joueur
-            self.finJeu()                                                   # Vérifie si un joueur a gagné
+            self.finJeu()                                                   # Vérifie si un joueur a gagné 
+            
+        
+        
             
                 
 tailleJeu = int(input("Taille du plateau (entre 8 et 12) : "))              # Taille du plateau
