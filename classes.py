@@ -1,68 +1,65 @@
-from tkinter import *
+from tkinter import *                                                       # Importation de la bibliothèque tkinter
 
-class Pion:
-    def __init__(self, abscisse = -1, ordonnee = -1, player = 0):
-        self.__x = abscisse
-        self.__y = ordonnee
-        self.__player = player
+class Pion:                                                                 # Classe Pion                                        
+    def __init__(self, abscisse = -1, ordonnee = -1, player = 0):           # Constructeur de la classe Pion
+        self.__x = abscisse                                                 # Abscisse du pion
+        self.__y = ordonnee                                                 # Ordonnée du pion
+        self.__player = player                                              # Joueur du pion                          
 
-    def getX(self):
-        return self.__x
-    def getY(self):
-        return self.__y
+    def getX(self):                                                         # Getter de l'abscisse du pion                               
+        return self.__x                                                     # Retourne l'abscisse du pion
+    def getY(self):                                                         # Getter de l'ordonnée du pion
+        return self.__y                                                     # Retourne l'ordonnée du pion                 
 
-    def setX(self, newX):
-        self.__x = newX
-    def setY(self, newY):
-        self.__y = newY
+    def setX(self, newX):                                                   # Setter de l'abscisse du pion                                  
+        self.__x = newX                                                     # Modifie l'abscisse du pion
+    def setY(self, newY):                                                   # Setter de l'ordonnée du pion                     
+        self.__y = newY                                                     # Modifie l'ordonnée du pion
 
-    def getPlayer(self):
-        return self.__player
+    def getPlayer(self):                                                    # Getter du joueur du pion
+        return self.__player                                                # Retourne le joueur du pion
 
-    def setPlayer(self, newPlayer):
-        self.__player = newPlayer
+    def setPlayer(self, newPlayer):                                         # Setter du joueur du pion
+        self.__player = newPlayer                                           # Modifie le joueur du pion
 
-    def updatePlayer(self):
-        self.__player = (self.__player + 1) % 2
-
-
-class Jeu:
-    def __init__(self, boardSize, pion):
-        self.__boardSize = boardSize
-        self.pion = pion
-        self.__Board = self.plateau(boardSize)
-        self.coords = {0: [], 1: []} 
-        self.possibleMoves = {0: [], 1: []}
+    def updatePlayer(self):                                                 # Méthode qui change le joueur du pion
+        self.__player = (self.__player + 1) % 2                             # Modifie le joueur du pion
 
 
-    def plateau(self, boardSize):
-        board = []
-        for i in range(boardSize):
-            line = []
-            for j in range(boardSize):
-                line.append(0)
-            board.append(line)
-        return board
+class Jeu:                                                                  # Classe Jeu
+    def __init__(self, boardSize, pion):                                    # Constructeur de la classe Jeu
+        self.__boardSize = boardSize                                        # Taille du plateau             
+        self.pion = pion                                                    # Pion du jeu                       
+        self.__Board = self.plateau(boardSize)                              # Plateau du jeu       
+        self.coords = {0: [], 1: []}                                        # Coordonnées des pions des joueurs                      
+        self.possibleMoves = {0: [], 1: []}                                 # Mouvements possibles des joueurs                      
 
 
-    def moveCondition(self):
-        currentPlayer = self.pion.getPlayer()
-        if currentPlayer in self.coords:
-            coords_player = self.coords[currentPlayer]
-            x = coords_player[0][0]
-            y = coords_player[0][1]
-        else:
-            x, y = -1, -1
+    def plateau(self, boardSize):                                           # Méthode qui crée le plateau du jeu
+        board = []                                                          # Liste qui contiendra le plateau                         
+        for i in range(boardSize):                                          # Boucle qui parcourt les lignes du plateau               
+            line = []                                                       # Liste qui contiendra les lignes du plateau
+            for j in range(boardSize):                                      # Boucle qui parcourt les colonnes du plateau                 
+                line.append(0)                                              # Ajoute un 0 à la ligne  
+            board.append(line)                                              # Ajoute la ligne au plateau
+        return board                                                        # Retourne le plateau
 
-        possibleCoords = [(2, 1), (2, -1), (-2, 1), (-2, -1), (1, 2), (1, -2), (-1, 2), (-1, -2)]
-        for possibleCoordsX, possibleCoordsY in possibleCoords:
-            newX, newY = x + possibleCoordsX, y + possibleCoordsY
-            if 0 <= newX < self.__boardSize and 0 <= newY < self.__boardSize and self.__Board[newX][newY] == 0:
-                self.possibleMoves[currentPlayer].append((newX, newY))
-        print(self.possibleMoves[currentPlayer])
-        print(currentPlayer)
-        print(x, y)
-        return self.possibleMoves[currentPlayer]
+
+    def moveCondition(self):                                                # Méthode qui vérifie les mouvements possibles
+        currentPlayer = self.pion.getPlayer()                               # Joueur du pion
+        if currentPlayer in self.coords:                                    # Si le joueur a déjà placé un pion
+            coords_player = self.coords[currentPlayer]                      # coord = coordonnées du pion du joueur
+            x = coords_player[0][0]                                         # Abscisse du pion du joueur    
+            y = coords_player[0][1]                                         # Ordonnée du pion du joueur
+        else:                                                               # Sinon                                
+            x, y = -1, -1                                                   # Abscisse et ordonnée du pion du joueur = -1 = Erreur
+
+        possibleCoords = [(2, 1), (2, -1), (-2, 1), (-2, -1), (1, 2), (1, -2), (-1, 2), (-1, -2)]               # Liste des mouvements possibles
+        for possibleCoordsX, possibleCoordsY in possibleCoords:                                                 # Boucle qui parcourt les mouvements possibles   
+            newX, newY = x + possibleCoordsX, y + possibleCoordsY                                               # Nouvelles coordonnées du pion du joueur
+            if 0 <= newX < self.__boardSize and 0 <= newY < self.__boardSize and self.__Board[newX][newY] == 0: # Si les coordonnées sont dans le plateau et que la case est vide
+                self.possibleMoves[currentPlayer].append((newX, newY))                                          # Ajoute les coordonnées à la liste des mouvements possibles
+        return self.possibleMoves[currentPlayer]                                                                # Retourne la liste des mouvements possibles
 
 
     def winCondition(self):
